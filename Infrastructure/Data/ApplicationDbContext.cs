@@ -7,6 +7,8 @@ namespace Infrastructure.Data;
 public class ApplicationDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }
+    public DbSet<Group> Groups { get; set; }
+    public DbSet<Expense> Expense { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -14,6 +16,17 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // modelBuilder.Entity<User>()
+        //     .HasMany(e => e.Groups)
+        //     .WithMany(e => e.Users);
+        //
+        // modelBuilder.Entity<Group>()
+        //     .HasMany(e => e.Expenses)
+        //     .WithOne(e => e.Group)
+        //     .HasForeignKey("GroupId")
+        //     .IsRequired();
+        //
+        
         
         base.OnModelCreating(modelBuilder);
     }
