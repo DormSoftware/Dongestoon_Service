@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using Application.Abstractions;
 using Domain.Entities;
+using Domain.Entities.UserEntity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,7 +26,8 @@ public class AuthController : ControllerBase
         {
             return BadRequest(new { message = "Email address needs to entered" });
         }
-        else if (String.IsNullOrEmpty(user.Password))
+        
+        if (String.IsNullOrEmpty(user.Password))
         {
             return BadRequest(new { message = "Password needs to entered" });
         }

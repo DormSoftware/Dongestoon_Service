@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Entities;
+namespace Domain.Entities.UserEntity;
 
 public class RegisterUser
-{   
+{
     public string Username { get; set; }
     public string Name { get; set; }
     public string LastName { get; set; }

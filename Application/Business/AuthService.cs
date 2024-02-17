@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Application.Abstractions;
 using Domain.Entities;
+using Domain.Entities.UserEntity;
 using Domain.Enums;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -21,7 +22,6 @@ public class AuthService : IAuthService
         _dbContext = dbContext;
         _configuration = configuration;
     }
-
 
     public async Task<User> Login(string userName, string password)
     {
