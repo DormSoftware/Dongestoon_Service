@@ -13,6 +13,7 @@ public static class DependencyInjection
     {
         services.AddInfrastructureServices(configuration);
         services.AddScoped<IAuthService, AuthService>();
+        
         return services;
     }
 }

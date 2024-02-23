@@ -12,5 +12,6 @@ public class Product
     public decimal Price { get; set; }
     public string Name { get; set; }
 
-    public Category Category { get; set; }
+    public Category? Category { get; set; }
+    public Guid? CategoryId { get; set; }
 }
