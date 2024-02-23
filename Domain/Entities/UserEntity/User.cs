@@ -18,10 +18,10 @@ public class User
     public string Token { get; set; } = "";
     public string Password { get; set; } = "";
 
-    public decimal MoneySpent { get; set; }
-    public decimal MoneyReceived { get; set; }
+    public decimal MoneySpent { get; set; } = 0;
+    public decimal MoneyReceived { get; set; } = 0;
 
-    public Rank Rank { get; set; }
+    public Rank Rank { get; set; } = Rank.STARTER;
     public bool IsActive { get; set; } = false;
 
     public List<Group> Groups { get; set; } = [];
@@ -33,5 +33,9 @@ public class User
         LastName = lastName;
         Email = email;
         Password = password;
+    }
+
+    public User()
+    {
     }
 }

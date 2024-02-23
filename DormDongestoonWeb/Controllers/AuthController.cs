@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using Application.Abstractions;
+using Application.Business.RequestStates;
 using Domain.Entities;
 using Domain.Entities.UserEntity;
 using Microsoft.AspNetCore.Authorization;
@@ -12,10 +13,13 @@ namespace DormDongestoonWeb.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
+    private readonly ICurrentUserStateHolder _currentUserStateHolder;
 
-    public AuthController(IAuthService authService)
+    public AuthController(IAuthService authService, ICurrentUserStateHolder currentUserStateHolder)
     {
         _authService = authService;
+        _currentUserStateHolder =
+            currentUserStateHolder ?? throw new ArgumentNullException(nameof(currentUserStateHolder));
     }
 
     [AllowAnonymous]
@@ -26,7 +30,7 @@ public class AuthController : ControllerBase
         {
             return BadRequest(new { message = "Email address needs to entered" });
         }
-        
+
         if (String.IsNullOrEmpty(user.Password))
         {
             return BadRequest(new { message = "Password needs to entered" });
@@ -94,6 +98,6 @@ public class AuthController : ControllerBase
             claims.Add(claim.Type, claim.Value);
         }
 
-        return Ok(claims);
+        return Ok(_currentUserStateHolder.GetCurrentUser());
     }
 }

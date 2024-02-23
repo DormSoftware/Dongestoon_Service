@@ -1,4 +1,6 @@
+using Infrastructure.Abstractions;
 using Infrastructure.Data;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +13,8 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services.AddDbContext<ApplicationDbContext>(x => x.UseInMemoryDatabase("ApplicationDataBase"));
+        services.AddScoped<IGroupRepository, GroupRepository>();
+        services.AddScoped<IUsersRepository, UsersRepository>();
         return services;
     }
 }

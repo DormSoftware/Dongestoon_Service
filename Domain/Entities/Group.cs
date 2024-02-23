@@ -12,10 +12,10 @@ public class Group
     public Guid Id { set; get; }
 
     public string Name { get; set; }
+    public Guid OwnerId { get; set; }
     public List<User> Users { get; set; } = [];
     public Guid? ProfilePic { get; set; }
-    public GroupRank Rank { get; set; }
-    public decimal TotalCost { get; set; }
-
-    public ICollection<Expense> Expenses { get; set; }
+    public GroupRank Rank { get; set; } = GroupRank.STARTER;
+    public decimal TotalCost { get; set; } = 0;
+    public ICollection<Expense> Expenses { get; set; } = new List<Expense>();
 }

@@ -2,15 +2,14 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Application.Abstractions;
-using Domain.Entities;
 using Domain.Entities.UserEntity;
 using Domain.Enums;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
-namespace Application.Business;
+namespace Application.Business.Services;
 
 public class AuthService : IAuthService
 {
@@ -31,7 +30,7 @@ public class AuthService : IAuthService
 
     public async Task<User> Login(Guid id, string password)
     {
-        User? user = await _dbContext.Users.FindAsync(id);
+        User? user = await _dbContext.Users.Include(x => x.Groups).SingleOrDefaultAsync(x => x.Id.Equals(id));
 
         if (user == null || BCrypt.Net.BCrypt.Verify(password, user.Password) == false)
         {
