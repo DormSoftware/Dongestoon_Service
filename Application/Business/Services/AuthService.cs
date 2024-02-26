@@ -4,6 +4,7 @@ using System.Text;
 using Application.Abstractions;
 using Domain.Entities.UserEntity;
 using Domain.Enums;
+using Domain.Exceptions;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +26,16 @@ public class AuthService : IAuthService
     public async Task<User> Login(string userName, string password)
     {
         var user = await _dbContext.Users.SingleOrDefaultAsync(x => x.Username.Equals(userName));
+        if (user is null)
+        {
+            throw new NoUserFoundWithGivenUserNameException(userName);
+        }
+
+        if (BCrypt.Net.BCrypt.Verify(password, user.Password) == false)
+        {
+            throw new PasswordDoesNotMatchWithUserNameException();
+        }
+
         return await Login(user, password);
     }
 
