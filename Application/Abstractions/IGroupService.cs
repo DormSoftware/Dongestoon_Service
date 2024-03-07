@@ -6,6 +6,6 @@ namespace Application.Abstractions;
 
 public interface IGroupService
 {
-    Task CreatGroup(CreateGroupDto createGroupDto);
+    Task<SimpleMessageDto> CreateGroup(CreateGroupDto createGroupDto);
     List<GroupsDto> GetUserGroups();
 }
