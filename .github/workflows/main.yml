@@ -4,7 +4,7 @@ on:
       - master
 jobs:
    dotnet:
-     uses: ./dotnet.yml@master
+     uses: .github/workflows/dotnet.yml@master
      
    deploy:
      uses: .github/workflows/deployToLiara.yml@master
