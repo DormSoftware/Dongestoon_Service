@@ -1,7 +1,6 @@
 using Application.Abstractions;
 using Application.Business.RequestStates;
 using Application.Dtos;
-using Domain.Entities;
 using Infrastructure.Abstractions;
 
 namespace Application.Business.Services;
@@ -17,11 +16,10 @@ public class GroupService : IGroupService
     {
         _groupRepository = groupRepository ?? throw new ArgumentNullException(nameof(groupRepository));
         _usersRepository = usersRepository ?? throw new ArgumentNullException(nameof(usersRepository));
-        _currentUserStateHolder =
-            currentUserStateHolder ?? throw new ArgumentNullException(nameof(currentUserStateHolder));
+        _currentUserStateHolder = currentUserStateHolder ?? throw new ArgumentNullException(nameof(currentUserStateHolder));
     }
 
-    public async Task CreatGroup(CreateGroupDto createGroupDto)
+    public async Task<SimpleMessageDto> CreateGroup(CreateGroupDto createGroupDto)
     {
         var users = await _usersRepository.GetUsersByUserNames(createGroupDto.Users);
 
@@ -31,6 +29,11 @@ public class GroupService : IGroupService
             OwnerId = _currentUserStateHolder.GetCurrentUser().Id,
             Users = users
         });
+
+        return new SimpleMessageDto
+        {
+            Message = "Your group has been created!"
+        };
     }
 
     public List<GroupsDto> GetUserGroups()
