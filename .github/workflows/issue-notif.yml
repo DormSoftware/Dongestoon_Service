@@ -1,0 +1,18 @@
+# .github/workflows/notify.yml
+name: telegram-notifier
+on:
+  pull_request:
+    types: [opened]
+  issues:
+    types: [opened]
+  push:
+    branches: ["master"]
+jobs:
+  something:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Blue Octocat            
+        uses: muhammadmp97/BlueOctocat@v1.0.0
+        with:
+          bot_token: ${{ secrets.BOT_TOKEN }}
+          user_id: ${{ secrets.USER_ID }}
