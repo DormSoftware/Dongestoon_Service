@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Blue Octocat            
-        uses: mazaheriMahdi/BlueOctocat@v1
+        uses: mazaheriMahdi/BlueOctocat@v2
         with:
           bot_token: ${{ secrets.BOT_TOKEN }}
           user_id: ${{ secrets.USER_ID }}
