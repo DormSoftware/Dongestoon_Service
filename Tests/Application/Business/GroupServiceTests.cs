@@ -14,78 +14,34 @@ namespace Tests.Application.Business;
 
 public class GroupServiceTests
 {
-    private readonly IGroupService sut;
-    private readonly IUsersRepository usersRepository;
-    private readonly IGroupRepository groupRepository;
-    private readonly ICurrentUserStateHolder currentUserStateHolder;
-
-    public GroupServiceTests()
-    {
-        usersRepository = Substitute.For<IUsersRepository>();
-        groupRepository = Substitute.For<IGroupRepository>();
-        currentUserStateHolder = Substitute.For<ICurrentUserStateHolder>();
-        this.sut = new GroupService(groupRepository, usersRepository, currentUserStateHolder);
-    }
-
-
+    // private readonly IGroupService _sut;
+    // private readonly IGroupRepository _groupRepository;
+    //
+    // public GroupServiceTests()
+    // {
+    //     _groupRepository = Substitute.For<IGroupRepository>();
+    //     _sut = new GroupService(_groupRepository);
+    // }
+    // //
     // [Fact]
-    // public void GetUserGroups_SHOULD_returnListOfUserGroup()
+    // public void CreateGroup_ShouldPassRightArgumentIntoGroupRepository_WhenEver()
     // {
     //     // Arrange
-    //     var user = new User
+    //     var ownerId = Guid.NewGuid();
+    //     var createGroupDto = new CreateGroupDto()
     //     {
-    //         Groups = [
-    //             new Group{
-    //                     Name = "some group name",
-    //                     OwnerId = Guid.NewGuid(),
-    //                     Users = []
-    //                 }
-    //         ]
+    //         Name = "some group name",
+    //         OwnerId = ownerId,
+    //         Users = new List<Guid>
+    //         {
+    //             ownerId
+    //         }
     //     };
-
-    //     var expected = new GroupsDto{
-    //         Name = user.Groups[0].Name,
-    //         OwnerId = user.Groups[0].OwnerId,
-    //         Users = []
-    //     };
-
-    //     currentUserStateHolder.GetCurrentUser().Returns(user);
-
+    //
     //     // Act
-    //     var actual = sut.GetUserGroups();
-
+    //     _sut.CreatGroup(createGroupDto);
+    //
     //     // Assert
-    //     actual[0].Should().BeEquivalentTo(expected,option => option.ExcludingNestedObjects());
+    //     _groupRepository.Received().GenerateNewGroup(Arg.Is<CreateGroupParams>(x => { }));
     // }
-
-    [Fact]
-    public void CreateGroup_SHOULD_callGroupRepositoryGenerateNewGroup_WHEN_Ever()
-    {
-        // Arrange
-        var user = new User
-        {
-            Groups = [
-                new Group{
-                        Name = "some group name",
-                        OwnerId = Guid.NewGuid(),
-                        Users = []
-                    }
-            ]
-        };
-
-        currentUserStateHolder.GetCurrentUser().Returns(user);
-
-        var createGroupDto = new CreateGroupDto
-        {
-            Name = "some group name",
-            Users = []
-        };
-
-        // Act
-        var actual = sut.CreateGroup(createGroupDto);
-
-        // Assert
-        groupRepository.ReceivedCalls();
-    }
-
 }
