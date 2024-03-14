@@ -1,0 +1,34 @@
+name: Generate New Commit Message
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-commit-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Generate new commit message
+        id: openai
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          pip install openai
+      - name: Generate commit message
+        id: commit_message
+        run: |
+          export OPENAI_API_KEY=secrets.OPENAI_
+          echo "Generating commit message..."
+          export OLD_COMMIT_MESSAGE=$(git log --format=%B -n 1 HEAD)
+          export GENERATED_MESSAGE=$(openai api completions.create -e text-davinci-003 --prompt "The current commit message is: \"$OLD_COMMIT_MESSAGE\". Please generate a new commit message:" --max_tokens 100)
+          echo "::set-output name=message::${GENERATED_MESSAGE}"
+
+      - name: Update commit message
+        run: |
+          git commit --amend -m "${GENERATED_MESSAGE}"
