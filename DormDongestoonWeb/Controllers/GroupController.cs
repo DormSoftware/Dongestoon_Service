@@ -23,10 +23,10 @@ public class GroupController : Controller
         return _groupService.GetUserGroups();
     }
 
-    [HttpGet]
-    public ActionResult<GroupsDto> GetUserGroup([FromQuery] Guid id)
+    [HttpGet("/{id}")]
+    public ActionResult<GroupsDto> GetUserGroup(string id)
     {
-        return _groupService.GetGroupById(id);
+        return _groupService.GetGroupById(Guid.Parse(id));
     }
 
     [HttpPost]
