@@ -1,0 +1,16 @@
+name: Pull Request Reviews
+
+on:
+  pull_request:
+    types: [ opened, synchronize ]
+
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Review Pull Request
+        uses: "JensAstrup/ai-reviewer@v1.0.1"
+        with:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
