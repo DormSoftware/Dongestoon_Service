@@ -1,15 +1,8 @@
 name: Generate New Commit Message
 
 on:
-  pull_request:
-    types: [closed]
-    branches:
-      - master
-    # Ensure the pull request was squashed
-    # This event does not differentiate between regular close and squash merge
-    # Additional checks will be done in the job
-    paths-ignore:
-      - '**'
+  push:
+    branches: [ "master" ]
 
 jobs:
   generate-commit-message:
