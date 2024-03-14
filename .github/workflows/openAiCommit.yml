@@ -6,7 +6,6 @@ on:
 
 jobs:
   generate-commit-message:
-    if: github.event.pull_request.merged && github.event.pull_request.merge_commit_sha
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
