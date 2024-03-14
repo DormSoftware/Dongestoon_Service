@@ -3,7 +3,7 @@ name: Generate New Commit Message
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   generate-commit-message:
