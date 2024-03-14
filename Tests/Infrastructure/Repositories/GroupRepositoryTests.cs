@@ -130,4 +130,51 @@ public class GroupRepositoryTests
         // Assert
         action.Should().Throw<OwnerUserNotPresentInUsersListException>();
     }
+
+
+    [Fact]
+    public void GetGroupById_SHOULD_returnGroupWithGivenId_WHEN_ever()
+    {
+        // Arrange
+        var groupId = Guid.NewGuid();
+        var group = new Group()
+        {
+            Id = groupId,
+            Name = "some group name",
+            OwnerId = Guid.NewGuid()
+        };
+        _dbContext.Groups.Add(group);
+        _dbContext.SaveChanges();
+
+        // Assert
+        var actual = _sut.GetGroupById(groupId);
+
+        // Act
+        actual.Should().BeEquivalentTo(group, options => options
+            .IncludingNestedObjects()
+            .AllowingInfiniteRecursion());
+    }
+
+    [Fact]
+    public void GetGroupById_SHOULD_throwInvalidGroupIdException_WHEN_groupWithGivenIdCannotBeFound()
+    {
+        // Arrange
+        var groupId = Guid.NewGuid();
+        var group = new Group()
+        {
+            Id = groupId,
+            Name = "some group name",
+            OwnerId = Guid.NewGuid()
+        };
+        _dbContext.Groups.Add(group);
+        _dbContext.SaveChanges();
+
+        // Assert
+        var actual = _sut.GetGroupById(groupId);
+
+        // Act
+        actual.Should().BeEquivalentTo(group, options => options
+            .IncludingNestedObjects()
+            .AllowingInfiniteRecursion());
+    }
 }

@@ -6,6 +6,7 @@ namespace Infrastructure.Abstractions;
 public interface IGroupRepository
 {
     ICollection<Group> GetAllUserGroups(Guid userId);
+    Group GetGroupById(Guid groupId);
     public void GenerateNewGroup(CreateGroupParams createGroupParams);
 }
 

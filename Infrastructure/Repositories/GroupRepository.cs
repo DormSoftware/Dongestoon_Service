@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Transactions;
 using Domain.Entities;
 using Domain.Exceptions;
 using Infrastructure.Abstractions;
@@ -20,6 +22,11 @@ public class GroupRepository : IGroupRepository
         var user = _dbContext.Users.Include(x => x.Groups).SingleOrDefault(x => x.Id.Equals(userId)) ??
                    throw new NoUserFoundWithGivenIdException(userId);
         return user.Groups;
+    }
+
+    public Group GetGroupById(Guid groupId)
+    {
+        return _dbContext.Groups.Include(x => x.Users).SingleOrDefault(x => x.Id.Equals(groupId)) ?? throw new InvalidGroupIdException($"there is no group with id : {groupId}");
     }
 
     public void GenerateNewGroup(CreateGroupParams createGroupParams)
