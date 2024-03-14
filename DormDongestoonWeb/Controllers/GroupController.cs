@@ -1,9 +1,5 @@
 using Application.Abstractions;
-using Application.Business;
-using Application.Business.Services;
 using Application.Dtos;
-using Domain.Entities;
-using Infrastructure.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,10 +23,15 @@ public class GroupController : Controller
         return _groupService.GetUserGroups();
     }
 
-    [HttpPost]
-    public ActionResult<List<Group>> CreateGroup([FromBody] CreateGroupDto createGroupDto)
+    [HttpGet]
+    public ActionResult<GroupsDto> GetUserGroup([FromQuery] Guid id)
     {
-        _groupService.CreateGroup(createGroupDto);
-        return Ok("Group created");
+        return _groupService.GetGroupById(id);
+    }
+
+    [HttpPost]
+    public Task<SimpleMessageDto> CreateGroup([FromBody] CreateGroupDto createGroupDto)
+    {
+        return _groupService.CreateGroup(createGroupDto);
     }
 }

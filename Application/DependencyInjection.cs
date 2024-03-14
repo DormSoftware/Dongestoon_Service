@@ -1,5 +1,4 @@
 using Application.Abstractions;
-using Application.Business;
 using Application.Business.Middlewares;
 using Application.Business.RequestStates;
 using Application.Business.Services;
@@ -19,6 +18,7 @@ public static class DependencyInjection
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IGroupService, GroupService>();
         services.AddScoped<ICurrentUserStateHolder, CurrentUserStateHolder>();
+        services.AddAutoMapper(typeof(ApplicationAutoMapper));
         return services;
     }
 
