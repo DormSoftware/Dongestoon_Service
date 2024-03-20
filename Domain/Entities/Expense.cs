@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Entities.UserEntity;
-using Domain.Enums;
 
 namespace Domain.Entities;
 
@@ -11,13 +10,15 @@ public class Expense
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { set; get; }
 
-    public User ExpenUser { get; set; }
+    public required Guid UserId { get; set; }
+    public User? User { get; set; }
 
     // INFO ABOUT EXPENSE
-    public DateTime Date { get; set; }
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public decimal Amount { get; set; }
+    public required DateTime Date { get; set; } = DateTime.Now;
+    public required string Title { get; set; }
+    public string? Description { get; set; }
+    public required decimal Amount { get; set; }
 
-    public Group Group { get; set; }
+    public required Guid GroupId { get; set; }
+    public Group? Group { get; set; }
 }

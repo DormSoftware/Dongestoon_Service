@@ -53,4 +53,9 @@ public class UsersRepository : IUsersRepository
     {
         return ids.Select(id => _dbContext.Users.Find(id) ?? throw new NoUserFoundWithGivenIdException(id)).ToList();
     }
+
+    public bool Exists(Guid id)
+    {
+        return _dbContext.Users.SingleOrDefault(x => x.Id.Equals(id)) is not null;
+    }
 }

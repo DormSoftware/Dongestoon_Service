@@ -13,7 +13,7 @@ public class Group
 
     public string Name { get; set; }
     public Guid OwnerId { get; set; }
-    public List<User> Users { get; set; } = [];
+    public List<User> Users { get; set; } = new();
     public Guid? ProfilePic { get; set; }
     public GroupRank Rank { get; set; } = GroupRank.STARTER;
     public decimal TotalCost { get; set; } = 0;

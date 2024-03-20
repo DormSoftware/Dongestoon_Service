@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace Infrastructure.Repositories.Exceptions;
+namespace Domain.Exceptions;
 
 [Serializable]
 public class NoProductFoundWithGivenException : Exception

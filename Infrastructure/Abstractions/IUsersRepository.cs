@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using Domain.Entities.UserEntity;
 
 namespace Infrastructure.Abstractions;
@@ -11,4 +10,5 @@ public interface IUsersRepository
     Task<List<User>> GetUsersByUserNames(List<string> userNames);
     User GetUserById(Guid id);
     List<User> GetUserByIdInRange(List<Guid> id);
+    bool Exists(Guid id);
 }

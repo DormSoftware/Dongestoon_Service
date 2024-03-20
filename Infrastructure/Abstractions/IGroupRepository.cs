@@ -8,6 +8,8 @@ public interface IGroupRepository
     ICollection<Group> GetAllUserGroups(Guid userId);
     Group GetGroupById(Guid groupId);
     public void GenerateNewGroup(CreateGroupParams createGroupParams);
+
+    public bool Exists(Guid id);
 }
 
 public struct CreateGroupParams

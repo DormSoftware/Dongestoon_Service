@@ -1,8 +1,8 @@
 using Domain.Entities;
+using Domain.Exceptions;
 using FuzzySharp;
 using Infrastructure.Abstractions;
 using Infrastructure.Data;
-using Infrastructure.Repositories.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
