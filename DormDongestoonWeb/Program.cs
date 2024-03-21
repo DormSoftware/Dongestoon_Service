@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+builder.Services.AddApplicationDependencies(builder.Configuration);
 
 builder.Services.AddAuthentication(opt =>
     {
@@ -73,7 +74,6 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 
-builder.Services.AddApplicationDependencies(builder.Configuration);
 
 var app = builder.Build();
 

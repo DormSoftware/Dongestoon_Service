@@ -24,7 +24,7 @@ public class User
     public Rank Rank { get; set; } = Rank.STARTER;
     public bool IsActive { get; set; } = false;
 
-    public List<Group> Groups { get; set; } = [];
+    public List<Group> Groups { get; set; } = new ();
 
     public User(string username, string name, string lastName, string email, string password)
     {

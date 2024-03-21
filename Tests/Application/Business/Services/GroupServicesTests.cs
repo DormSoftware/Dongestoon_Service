@@ -48,6 +48,7 @@ public class GroupServicesTests
 
         var expected = new GroupsDto()
         {
+            Id = group.Id,
             Name = group.Name,
             Rank = group.Rank,
             Users = new List<Guid>(),

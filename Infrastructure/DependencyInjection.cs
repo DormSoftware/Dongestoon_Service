@@ -15,6 +15,7 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(x => x.UseInMemoryDatabase("ApplicationDataBase"));
         services.AddScoped<IGroupRepository, GroupRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
+        services.AddScoped<IExpenseRepository, ExpenseRepository>();
         return services;
     }
 }

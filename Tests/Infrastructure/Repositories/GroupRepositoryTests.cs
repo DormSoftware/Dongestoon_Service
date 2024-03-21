@@ -62,7 +62,7 @@ public class GroupRepositoryTests
         _dbContext.SaveChanges();
 
         // Assert
-        actual.Should().BeEquivalentTo([group]);
+        actual.Should().BeEquivalentTo(new List<Group>() { group });
     }
 
     [Fact]
@@ -176,5 +176,53 @@ public class GroupRepositoryTests
         actual.Should().BeEquivalentTo(group, options => options
             .IncludingNestedObjects()
             .AllowingInfiniteRecursion());
+    }
+
+
+    [Fact]
+    public void Exists_SHOULD_ReturnTrue_WHEN_AGroupWithGivenIdIsExistsInDb()
+    {
+        // Arrange
+        var groupId = Guid.NewGuid();
+        var group = new Group()
+        {
+            Id = groupId,
+            Name = "some group name",
+            OwnerId = Guid.NewGuid()
+        };
+        _dbContext.Groups.Add(group);
+        _dbContext.SaveChanges();
+
+        // Assert
+        var actual = _sut.Exists(groupId);
+        _dbContext.Groups.Remove(group);
+        _dbContext.SaveChanges();
+
+        // Act
+        actual.Should().BeTrue();
+    }
+
+
+    [Fact]
+    public void Exists_SHOULD_ReturnFalse_WHEN_AGroupWithGivenIdIsNotExistsInDb()
+    {
+        // Arrange
+        var groupId = Guid.NewGuid();
+        var group = new Group()
+        {
+            Id = groupId,
+            Name = "some group name",
+            OwnerId = Guid.NewGuid()
+        };
+        _dbContext.Groups.Add(group);
+        _dbContext.SaveChanges();
+
+        // Assert
+        var actual = _sut.Exists(Guid.NewGuid());
+        _dbContext.Groups.Remove(group);
+        _dbContext.SaveChanges();
+
+        // Act
+        actual.Should().BeFalse();
     }
 }

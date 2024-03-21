@@ -1,4 +1,6 @@
+using Application.Abstractions;
 using Domain.Entities.UserEntity;
+using Domain.Exceptions;
 
 namespace Application.Business.RequestStates;
 
@@ -20,14 +22,4 @@ public class CurrentUserStateHolder : ICurrentUserStateHolder
     {
         _user = user;
     }
-}
-
-public class NoLoggedInUserException : Exception
-{
-}
-
-public interface ICurrentUserStateHolder
-{
-    User GetCurrentUser();
-    void SetUser(User user);
 }

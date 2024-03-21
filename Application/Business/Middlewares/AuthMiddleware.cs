@@ -1,6 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Application.Business.RequestStates;
+using Application.Abstractions;
 using Infrastructure.Abstractions;
 using Microsoft.AspNetCore.Http;
 
