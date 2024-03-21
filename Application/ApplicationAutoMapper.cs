@@ -7,7 +7,7 @@ namespace Application;
 
 public class ApplicationAutoMapper : Profile
 {
-    protected ApplicationAutoMapper()
+    public ApplicationAutoMapper()
     {
         CreateMap<Group, GroupsDto>();
         CreateMap<CreateExpenseArg, Expense>();

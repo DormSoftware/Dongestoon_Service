@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Exceptions;
 using Infrastructure.Abstractions;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -45,9 +46,14 @@ public class ExpenseRepository : IExpenseRepository
 
         var expense = _mapper.Map<CreateExpenseArg, Expense>(createExpenseArg);
 
-        var finalExpense = _applicationDbContext.Expense.Add(expense).Entity;
+        var createdExpenseWithoutUserAndGroup = _applicationDbContext.Expense.Add(expense).Entity;
 
         _applicationDbContext.SaveChanges();
+
+        var finalExpense = _applicationDbContext.Expense
+            .Include(x => x.Group)
+            .Include(x => x.User)
+            .Single(x => x.Id.Equals(createdExpenseWithoutUserAndGroup.Id));
 
         return finalExpense;
     }
