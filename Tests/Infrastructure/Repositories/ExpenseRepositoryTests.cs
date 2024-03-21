@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Domain.Entities.UserEntity;
+using Domain.Enums;
 using Domain.Exceptions;
 using FluentAssertions;
 using Infrastructure.Abstractions;
@@ -47,7 +49,26 @@ public class ExpenseRepositoryTests
         };
         _groupRepository.Exists(Arg.Is<Guid>(x => x.Equals(createExpenseArg.GroupId))).Returns(true);
         _usersRepository.Exists(Arg.Is<Guid>(x => x.Equals(createExpenseArg.UserId))).Returns(true);
+        _applicationDbContext.Groups.Add(new Group
+        {
+            Id = createExpenseArg.GroupId,
+            Name = "some gp name",
+            Users = new List<User>(),
+            OwnerId = Guid.NewGuid(),
+            TotalCost = 0,
+        });
 
+        _applicationDbContext.Users.Add(new User
+        {
+            Id = (Guid)createExpenseArg.UserId,
+            Name = "some user name",
+            Email = "some email name",
+            Username = "user name",
+            LastName = "some last name",
+            IsActive = false,
+            MoneySpent = 0
+        });
+        _applicationDbContext.SaveChanges();
         // Act
         _expenseRepository.CreateExpense(createExpenseArg);
         var action = () =>

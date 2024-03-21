@@ -14,12 +14,12 @@ public static class DependencyInjection
     public static IServiceCollection AddApplicationDependencies(this IServiceCollection services,
         IConfiguration configuration)
     {
-        
         services.AddAutoMapper(typeof(ApplicationAutoMapper));
         services.AddInfrastructureServices(configuration);
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IGroupService, GroupService>();
         services.AddScoped<ICurrentUserStateHolder, CurrentUserStateHolder>();
+        services.AddScoped<IExpenseService, ExpenseService>();
         return services;
     }
 

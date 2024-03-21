@@ -30,7 +30,7 @@ public class GroupController : Controller
     }
 
     [HttpPost]
-    public Task<SimpleMessageDto> CreateGroup([FromBody] CreateGroupDto createGroupDto)
+    public Task<GroupsDto> CreateGroup([FromBody] CreateGroupDto createGroupDto)
     {
         return _groupService.CreateGroup(createGroupDto);
     }

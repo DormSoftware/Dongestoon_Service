@@ -27,7 +27,7 @@ public class ExpenseRepository : IExpenseRepository
         var createExpenseExceptions = new List<Exception>();
 
 
-        if (!_usersRepository.Exists((Guid)createExpenseArg.UserId))
+        if (!_usersRepository.Exists((Guid) createExpenseArg.UserId))
         {
             createExpenseExceptions.Add(new NoUserFoundWithGivenIdException());
         }
@@ -46,14 +46,14 @@ public class ExpenseRepository : IExpenseRepository
 
         var expense = _mapper.Map<CreateExpenseArg, Expense>(createExpenseArg);
 
-        var createdExpenseWithoutUserAndGroup = _applicationDbContext.Expense.Add(expense).Entity;
+        var createdExpenseWithoutUserAndGroup = _applicationDbContext.Expense.Add(expense);
 
         _applicationDbContext.SaveChanges();
 
         var finalExpense = _applicationDbContext.Expense
             .Include(x => x.Group)
             .Include(x => x.User)
-            .Single(x => x.Id.Equals(createdExpenseWithoutUserAndGroup.Id));
+            .Single(x => x.Id.Equals(createdExpenseWithoutUserAndGroup.Entity.Id));
 
         return finalExpense;
     }

@@ -27,7 +27,7 @@ public class GroupRepository : IGroupRepository
         return _dbContext.Groups.Include(x => x.Users).SingleOrDefault(x => x.Id.Equals(groupId)) ?? throw new NoGroupFoundWithGivenIdException($"there is no group with id : {groupId}");
     }
 
-    public void GenerateNewGroup(CreateGroupParams createGroupParams)
+    public Group GenerateNewGroup(CreateGroupParams createGroupParams)
     {
         if (!createGroupParams.Users.Any(x => x.Id.Equals(createGroupParams.OwnerId)))
         {
@@ -41,8 +41,11 @@ public class GroupRepository : IGroupRepository
             Users = createGroupParams.Users
         };
 
-        _dbContext.Groups.Add(newGroup);
+        var group = _dbContext.Groups.Add(newGroup).Entity;
+
         _dbContext.SaveChanges();
+
+        return group;
     }
 
     public bool Exists(Guid id)
