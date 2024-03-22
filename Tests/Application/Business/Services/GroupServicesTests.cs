@@ -17,6 +17,8 @@ public class GroupServicesTests
 {
     private readonly ICurrentUserStateHolder _currentUserStateHolder;
     private readonly IGroupService _sut;
+    private readonly IUsersRepository _usersRepository;
+    private readonly IGroupRepository _groupRepository;
 
     public GroupServicesTests()
     {
@@ -24,7 +26,9 @@ public class GroupServicesTests
 
         var mapper = new MapperConfiguration(x => x.CreateMap<Group, GroupsDto>());
 
-        _sut = new GroupService(Substitute.For<IGroupRepository>(), Substitute.For<IUsersRepository>(), _currentUserStateHolder, mapper.CreateMapper());
+        _groupRepository = Substitute.For<IGroupRepository>();
+        _usersRepository = Substitute.For<IUsersRepository>();
+        _sut = new GroupService(_groupRepository, _usersRepository, _currentUserStateHolder, mapper.CreateMapper());
     }
 
     [Fact]
@@ -61,5 +65,37 @@ public class GroupServicesTests
 
         // Assert
         actual[0].Should().BeEquivalentTo(expected, options => options.ComparingByMembers<GroupsDto>());
+    }
+
+    [Fact]
+    public async Task AddGroupMemberAsync_WhenEver_ReturnsUsers()
+    {
+        // Arrange
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            Name = "hossein",
+            Username = "hhh",
+            LastName = "Shirkavand",
+            Email = "h@g.c"
+        };
+        var group = new Group
+        {
+            Id = Guid.NewGuid(),
+            Name = "name",
+            OwnerId = new Guid(),
+            Users = [user]
+        };
+        _usersRepository.GetUserById(user.Id).Returns(user);
+        _groupRepository.AddGroupMemberAsync(group.Id, user).Returns(group);
+        var addGroupRequest = new AddGroupMemberRequest
+        {
+            GroupId = group.Id,
+            UserId = user.Id
+        };
+        // Act
+        var actual = await _sut.AddGroupMemberAsync(addGroupRequest);
+        // Assert
+        actual.Should().Contain(user);
     }
 }
