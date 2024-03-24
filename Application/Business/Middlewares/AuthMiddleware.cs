@@ -21,7 +21,7 @@ public class AuthMiddleware
     {
         string authHeader = context.Request.Headers["Authorization"];
 
-        if (authHeader != null)
+         if (authHeader != null)
         {
             if (authHeader.StartsWith("Bearer"))
             {
@@ -30,11 +30,9 @@ public class AuthMiddleware
 
             var handler = new JwtSecurityTokenHandler();
 
-            JwtSecurityToken jwt = handler.ReadJwtToken(authHeader);
-
-            var claims = new Dictionary<string, string>();
-
-            var identity = new ClaimsIdentity(jwt.Claims, "basic");
+            var jwt = handler.ReadJwtToken(authHeader);
+            
+            var identity = new ClaimsIdentity(jwt.Claims, "bearer");
             context.User = new ClaimsPrincipal(identity);
 
             foreach (var jwtClaim in jwt.Claims)

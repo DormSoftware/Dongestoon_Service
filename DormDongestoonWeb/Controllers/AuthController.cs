@@ -22,59 +22,47 @@ public class AuthController : ControllerBase
             currentUserStateHolder ?? throw new ArgumentNullException(nameof(currentUserStateHolder));
     }
 
-    [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> Login([FromBody] LoginUser user)
     {
-        if (String.IsNullOrEmpty(user.UserName))
+        if (string.IsNullOrEmpty(user.UserName))
         {
-            return BadRequest(new { message = "Email address needs to entered" });
+            return BadRequest(new { message = "Username required" });
         }
 
-        if (String.IsNullOrEmpty(user.Password))
+        if (string.IsNullOrEmpty(user.Password))
         {
-            return BadRequest(new { message = "Password needs to entered" });
+            return BadRequest(new { message = "Password required" });
         }
 
-        User loggedInUser = await _authService.Login(user.UserName, user.Password);
-
-        if (loggedInUser != null)
-        {
-            return Ok(loggedInUser);
-        }
-
-        return BadRequest(new { message = "User login unsuccessful" });
+        return Ok(await _authService.Login(user.UserName, user.Password));
     }
 
-    [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> Register([FromBody] RegisterUser user)
     {
         if (String.IsNullOrEmpty(user.Name))
         {
-            return BadRequest(new { message = "Name needs to entered" });
+            return BadRequest(new { message = "Name required" });
         }
-        else if (String.IsNullOrEmpty(user.Username))
+
+        if (String.IsNullOrEmpty(user.Username))
         {
-            return BadRequest(new { message = "User name needs to entered" });
+            return BadRequest(new { message = "Username required" });
         }
-        else if (String.IsNullOrEmpty(user.Password))
+
+        if (String.IsNullOrEmpty(user.Password))
         {
-            return BadRequest(new { message = "Password needs to entered" });
+            return BadRequest(new { message = "Password required" });
         }
 
         User userToRegister = new(user.Username, user.Name, user.LastName, user.Email, user.Password);
 
         User registeredUser = await _authService.Register(userToRegister);
 
-        User loggedInUser = await _authService.Login(registeredUser.Id, user.Password);
+        var token = await _authService.Login(registeredUser.Username, user.Password);
 
-        if (loggedInUser != null)
-        {
-            return Ok(loggedInUser);
-        }
-
-        return BadRequest(new { message = "User registration unsuccessful" });
+        return Ok(token);
     }
 
     [HttpGet]

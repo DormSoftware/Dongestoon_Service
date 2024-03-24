@@ -2,9 +2,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Application.Abstractions;
+using Application.Dtos;
 using Domain.Entities.UserEntity;
 using Domain.Enums;
 using Domain.Exceptions;
+using Infrastructure.Abstractions;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,18 +16,18 @@ namespace Application.Business.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly ApplicationDbContext _dbContext;
     private readonly IConfiguration _configuration;
+    private readonly IUsersRepository _usersRepository;
 
-    public AuthService(ApplicationDbContext dbContext, IConfiguration configuration)
+    public AuthService(IConfiguration configuration, IUsersRepository usersRepository)
     {
-        _dbContext = dbContext;
         _configuration = configuration;
+        _usersRepository = usersRepository;
     }
 
-    public async Task<User> Login(string userName, string password)
+    public async Task<string> Login(string userName, string password)
     {
-        var user = await _dbContext.Users.SingleOrDefaultAsync(x => x.Username.Equals(userName));
+        var user = await _usersRepository.GetUserByUserName(userName);
         if (user is null)
         {
             throw new NoUserFoundWithGivenUserNameException(userName);
@@ -36,22 +38,14 @@ public class AuthService : IAuthService
             throw new PasswordDoesNotMatchWithUserNameException();
         }
 
-        return await Login(user, password);
-    }
-
-    public async Task<User> Login(Guid id, string password)
-    {
-        User? user = await _dbContext.Users.Include(x => x.Groups).SingleOrDefaultAsync(x => x.Id.Equals(id));
-
-        if (user == null || BCrypt.Net.BCrypt.Verify(password, user.Password) == false)
+        return TokenGenerator(new TokenGeneratorDto
         {
-            return null; //returning null intentionally to show that login was unsuccessful
-        }
-
-        return await Login(user, password);
+            Username = user.Username,
+            Id = user.Id
+        });
     }
 
-    public async Task<User> Login(User user, string password)
+    /*public async Task<User> Login(User user, string password)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_configuration["JWT:SecretKey"]);
@@ -76,16 +70,33 @@ public class AuthService : IAuthService
         user.IsActive = true;
 
         return user;
-    }
+    }*/
 
     public async Task<User> Register(User user)
     {
         user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
         user.IsActive = true;
         user.Rank = Rank.STARTER;
-        _dbContext.Users.Add(user);
-        await _dbContext.SaveChangesAsync();
+        await _usersRepository.AddUserAsync(user);
 
         return user;
+    }
+
+    private string TokenGenerator(TokenGeneratorDto tokenGeneratorDto)
+    {
+        var key = Encoding.ASCII.GetBytes(_configuration["JWT:SecretKey"]);
+        var claims = new List<Claim>()
+        {
+            new(ClaimTypes.Name, tokenGeneratorDto.Username),
+            new("id", tokenGeneratorDto.Id.ToString()),
+        };
+
+        var jwt = new JwtSecurityToken(claims: claims,
+            issuer: _configuration["JWT:Issuer"],
+            audience: _configuration["JWT:Audience"],
+            signingCredentials:
+            new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        );
+        return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
 }

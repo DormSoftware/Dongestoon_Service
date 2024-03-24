@@ -11,4 +11,5 @@ public interface IUsersRepository
     Task<List<User>> GetUsersByUserNames(List<string> userNames);
     User GetUserById(Guid id);
     List<User> GetUserByIdInRange(List<Guid> id);
+    Task<User> AddUserAsync(User user);
 }

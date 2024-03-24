@@ -53,4 +53,12 @@ public class UsersRepository : IUsersRepository
     {
         return ids.Select(id => _dbContext.Users.Find(id) ?? throw new NoUserFoundWithGivenIdException(id)).ToList();
     }
+
+    public async Task<User> AddUserAsync(User user)
+    {
+        await _dbContext.Users.AddAsync(user);
+        await _dbContext.SaveChangesAsync();
+
+        return user;
+    }
 }
