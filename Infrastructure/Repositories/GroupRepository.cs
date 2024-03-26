@@ -1,6 +1,5 @@
-using System.Diagnostics;
-using System.Transactions;
 using Domain.Entities;
+using Domain.Entities.UserEntity;
 using Domain.Exceptions;
 using Infrastructure.Abstractions;
 using Infrastructure.Data;
@@ -45,5 +44,14 @@ public class GroupRepository : IGroupRepository
 
         _dbContext.Groups.Add(newGroup);
         _dbContext.SaveChanges();
+    }
+
+    public async Task<Group> AddGroupMemberAsync(Guid groupId, User user)
+    {
+        var group = GetGroupById(groupId);
+        
+        group.Users.Add(user);
+        await _dbContext.SaveChangesAsync();
+        return group;
     }
 }

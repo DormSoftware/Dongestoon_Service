@@ -1,3 +1,4 @@
+using Bogus;
 using Domain.Entities;
 using Domain.Entities.UserEntity;
 using Domain.Exceptions;
@@ -176,5 +177,36 @@ public class GroupRepositoryTests
         actual.Should().BeEquivalentTo(group, options => options
             .IncludingNestedObjects()
             .AllowingInfiniteRecursion());
+    }
+
+    [Fact]
+    public async Task AddGroupMemberAsync_WhenEver_ReturnsGroup()
+    {
+        // Arrange
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            Name = "hossein",
+            Username = "hhh",
+            LastName = "shirkavand",
+            Email = "h@g.c"
+        };
+        var group = new Group
+        {
+            Id = Guid.NewGuid(),
+            Name = "name",
+            OwnerId = new Guid()
+        };
+        await _dbContext.Users.AddAsync(user);
+        await _dbContext.Groups.AddAsync(group);
+        await _dbContext.SaveChangesAsync();
+        // Act
+        var actual = await _sut.AddGroupMemberAsync(group.Id, user);
+        // Assert
+        actual.Users.Should().Contain(user);
+
+        _dbContext.Groups.Remove(group);
+        _dbContext.Users.Remove(user);
+        await _dbContext.SaveChangesAsync();
     }
 }

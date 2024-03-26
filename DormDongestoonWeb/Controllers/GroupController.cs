@@ -32,6 +32,14 @@ public class GroupController : Controller
     [HttpPost]
     public Task<SimpleMessageDto> CreateGroup([FromBody] CreateGroupDto createGroupDto)
     {
-        return _groupService.CreateGroup(createGroupDto);
+        return _groupService.CreateGroupAsync(createGroupDto);
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> AddGroupMember([FromBody] AddGroupMemberRequest addGroupMemberRequest)
+    {
+        var response =await _groupService.AddGroupMemberAsync(addGroupMemberRequest);
+
+        return Ok(response);
     }
 }
